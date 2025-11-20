@@ -1,5 +1,9 @@
 package mx.gapsi.gapsi_demo_ms_producer.service;
 
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -38,8 +42,11 @@ public class MsService {
     @SuppressWarnings("null")
     public void createCustomerKafka(Object objectLabel) throws Exception {
         Label label = (Label) objectLabel;
+        Date fechaActual = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String fechaFormateada = sdf.format(fechaActual);
         SendResult<String, Label> result =
-                kafkaTemplate.send(topicKafka, label.getLabelId().toString(), label).get();
+                kafkaTemplate.send(topicKafka, fechaFormateada, label).get();
         System.out.println("partition() " + result.getRecordMetadata().partition());
         System.out.println("topic() " + result.getRecordMetadata().topic());
         System.out.println("offset() " + result.getRecordMetadata().offset());
